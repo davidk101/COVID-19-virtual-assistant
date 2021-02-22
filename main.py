@@ -1,12 +1,15 @@
 import requests
 import json
+import pyttsx3 #text-to-speech
+import speech_recognition as sr
+import re
 
 # you are welcome to use API keys liberally
 API_KEY = "t-KBwMZjcLrT"
 PROJECT_TOKEN = "tJGQu1Fr3a0G"
 RUN_TOKEN = "tw5EBiaRs926"
 
-#keyword self represents the instance of a class and binds the attributes with the given arguments
+# keyword self represents the instance of a class and binds the attributes with the given arguments
 
 class Data:
     def __init__(self, api_key, project_token):
@@ -50,3 +53,11 @@ class Data:
             if content['name'].lower() == country.lower():
                 return content
 
+data = Data(API_KEY, PROJECT_TOKEN)
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+speak("hello")
