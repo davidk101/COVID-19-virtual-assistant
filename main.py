@@ -60,4 +60,21 @@ def speak(text):
     engine.say(text)
     engine.runAndWait()
 
-speak("hello")
+def get_audio():
+    r = sr.Recognizer
+    with sr.Microphone() as source:
+        audio = r.listen(source) # listen from Microphone source
+        said = ""
+
+        try:
+            said  = r.recognize_google(audio) # recognizes audio using Google Speech Recognition API to translate speech to text
+        except Exception as e:
+            print("Exception:", str(e))
+
+    return said.lower()
+
+def main():
+    while True:
+        print('Talk to me!')
+        text = get_audio()
+
