@@ -53,6 +53,11 @@ class Data:
             if content['name'].lower() == country.lower():
                 return content
 
+    def get_list_of_countries(self):
+        countries = []
+        for country in self.data['country']:
+            countries.append(country['name'].lower())
+
 data = Data(API_KEY, PROJECT_TOKEN)
 
 def speak(text):
@@ -74,7 +79,12 @@ def get_audio():
     return said.lower()
 
 def main():
+
+    END_PHRASE = "stop"
+
     while True:
         print('Talk to me!')
         text = get_audio()
 
+        if text.find(END_PHRASE):
+            break
