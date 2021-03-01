@@ -36,21 +36,21 @@ class Data:
         data = self.data['total']  # returns the list []
 
         for content in data:
-            if content['name'] == "Coronavirus Cases":
+            if content['name'] == "Coronavirus Cases:":
                 return content['value']
 
     def get_total_deaths(self):
         data = self.data['total']  # returns the list []
 
         for content in data:
-            if content['name'] == "Deaths":
+            if content['name'] == "Deaths:":
                 return content['value']
 
     def get_total_recovered(self):
         data = self.data['total']  # returns the list []
 
         for content in data:
-            if content['name'] == "Recovered":
+            if content['name'] == "Recovered:":
                 return content['value']
 
     def get_country_data(self, country):
@@ -92,6 +92,8 @@ def main():
     data = Data(API_KEY, PROJECT_TOKEN)
     END_PHRASE = "stop"
 
+    print(data.get_total_cases())
+
     # defining a dictionary and mapping key to value
     TOTAL_PATTERNS = {
         re.compile("total cases"): data.get_total_cases,
@@ -104,7 +106,9 @@ def main():
 
     while True:
         print('Talk to me!')
-        text = get_audio()
+        # text = get_audio()
+
+        text = "total cases"
         print(text)
         result = None
 
@@ -114,10 +118,14 @@ def main():
                 break
 
         if result:
-            speak(result)
+            # speak(result)
+            print(result)
 
-        if text.find(END_PHRASE) != -1:  # returns -1 if nothing is found
-            print("Exit")
-            break
+        # if text.find(END_PHRASE) != -1:  # returns -1 if nothing is found
+        #   print("Exit")
+        #  break
+
+        break
+
 
 main()
