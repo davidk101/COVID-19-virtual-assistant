@@ -67,6 +67,8 @@ class Data:
         for country in self.data['country']:
             countries.append(country['name'].lower())
 
+        return countries
+
 
 def speak(text):
     engine = pyttsx3.init()
@@ -110,40 +112,42 @@ def main():
 
     COUNTRY_PATTERNS = {
 
-        # lamda <argument> : expression -> anonymous function definition with any number of arguments but only one expression
+        # lamda <argument> : expression -> anonymous function definition with any number of arguments but only one
+        # expression
 
-        re.compile("[\w\s]" + "cases" + "[\w\s]"): (lambda country: data.get_country_data(country)['total_cases']),
-        re.compile("[\w\s]" + "deaths" + "[\w\s]"): (lambda country: data.get_country_data(country)['total_deaths']),
-        re.compile("[\w\s]" + "active" + "[\w\s]"): (lambda country: data.get_country_data(country)['total_active'])
-
+        re.compile("[\w\s]+ cases [\w\s]+"): (lambda country: data.get_country_data(country)['total_cases']),
+        re.compile("[\w\s]+ deaths [\w\s]+"): (lambda country: data.get_country_data(country)['total_deaths']),
+        re.compile("[\w\s]+ active [\w\s]+"): (lambda country: data.get_country_data(country)['total_active'])
 
     }
     while True:
         print('Talk to me!')
         # text = get_audio()
 
-        text = "cases in canada"
+        text = "how many cases in argentina"
         print(text)
         result = None
 
         for pattern, func in COUNTRY_PATTERNS.items():
+
             if pattern.match(text):
 
-                words = set(text.split(" "))  # {"number","of","cases","in","Argentina"} && converting to set to GET
-                # data in O(1) time
+                print("hello")
+                words = set(text.split(" "))  # {"number","of","cases","in","Argentina"} && converting array to set
+                # to GET data in O(1) time
+                print(words)
 
                 for country in country_list:
                     if country in words:
                         result = func(country)
                         break
 
+        # print(data.get_country_data("india")['total_cases'])
+
         for pattern, func in TOTAL_PATTERNS.items():
             if pattern.match(text):
                 result = func()
                 break
-
-
-
 
         if result:
             # speak(result)
@@ -154,6 +158,5 @@ def main():
         #  break
 
         break
-
 
 main()
