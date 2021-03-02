@@ -47,6 +47,7 @@ class Data:
                 return content['value']
 
     def get_total_recovered(self):
+
         data = self.data['total']  # returns the list []
 
         for content in data:
@@ -54,6 +55,7 @@ class Data:
                 return content['value']
 
     def get_country_data(self, country):
+
         data = self.data['country']
 
         for content in data:
@@ -92,9 +94,11 @@ def main():
     data = Data(API_KEY, PROJECT_TOKEN)
     END_PHRASE = "stop"
 
-    print(data.get_total_cases())
+    country_list = data.get_list_of_countries() # []
 
     # defining a dictionary and mapping key to value
+
+    # \w -> any character, digit, underscore,etc. && \s -> any whitespace character
     TOTAL_PATTERNS = {
         re.compile("total cases"): data.get_total_cases,
         re.compile("[\w\s]+ total [\w\s]+ cases"): data.get_total_cases,
@@ -102,26 +106,50 @@ def main():
         re.compile("[\w\s]+ total [\w\s]+ deaths"): data.get_total_deaths,
         re.compile("[\w\s]+ total deaths"): data.get_total_deaths
     }
-    # \w -> any character, digit, underscore,etc. && \s -> any whitespace character
 
+
+    COUNTRY_PATTERNS = {
+
+        # lamda <argument> : expression -> anonymous function definition with any number of arguments but only one expression
+
+        re.compile("[\w\s]" + "cases" + "[\w\s]"): (lambda country: data.get_country_data(country)['total_cases']),
+        re.compile("[\w\s]" + "deaths" + "[\w\s]"): (lambda country: data.get_country_data(country)['total_deaths']),
+        re.compile("[\w\s]" + "active" + "[\w\s]"): (lambda country: data.get_country_data(country)['total_active'])
+
+
+    }
     while True:
         print('Talk to me!')
         # text = get_audio()
 
-        text = "total cases"
+        text = "cases in canada"
         print(text)
         result = None
+
+        for pattern, func in COUNTRY_PATTERNS.items():
+            if pattern.match(text):
+
+                words = set(text.split(" "))  # {"number","of","cases","in","Argentina"} && converting to set to GET
+                # data in O(1) time
+
+                for country in country_list:
+                    if country in words:
+                        result = func(country)
+                        break
 
         for pattern, func in TOTAL_PATTERNS.items():
             if pattern.match(text):
                 result = func()
                 break
 
+
+
+
         if result:
             # speak(result)
             print(result)
 
-        # if text.find(END_PHRASE) != -1:  # returns -1 if nothing is found
+        # if text.find(END_PHRASE) != -1:  # text.find() returns -1 if no phrase is found
         #   print("Exit")
         #  break
 
