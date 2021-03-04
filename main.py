@@ -18,13 +18,20 @@ class Data:
     def __init__(self, api_key, project_token):
         self.api_key = api_key
         self.project_token = project_token
-        self.params = {"api_key": self.api_key}
+        self.run_token = RUN_TOKEN
+        self.params = {
+            "api_key": API_KEY
+        }
         self.data = self.get_data()  # GET request during object instantiation
 
     def get_data(self):
         # API GET request
         response = requests.get(f'https://www.parsehub.com/api/v2/projects/{self.project_token}/last_ready_run/data',
                                 params=self.params)
+
+        # debugging URL: https://www.parsehub.com/api/v2/runs/tw5EBiaRs926/data?api_key=t-KBwMZjcLrT
+        # data = response.json()
+
         data = json.loads(response.text)
 
         return data
